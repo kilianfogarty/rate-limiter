@@ -11,6 +11,11 @@ Also, check out this implementation from Lyft in Go:
 
 https://github.com/envoyproxy/ratelimit
 
+Hashicorp's LRU implementation:
+
+https://github.com/hashicorp/golang-lru/tree/main
+
+Useful when I introduce a cache to store a fixed size number of keys that are currently maxed out?
 
 
 It discusses four different types of limiters:
