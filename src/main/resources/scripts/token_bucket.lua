@@ -1,8 +1,10 @@
 local key = KEYS[1]
 local capacity = tonumber(ARGV[1])
 local rate = tonumber(ARGV[2])
-local now = tonumber(ARGV[3])
 local ttl = tonumber(ARGV[4])
+
+local t = redis.call('TIME')
+local now = tonumber(t[1]) * 1000 + math.floor(tonumber(t[2]) / 1000)
 
 local tokens = tonumber(redis.call('HGET', key, 'tokens'))
 local last = tonumber(redis.call('HGET', key, 'last_refill_ms'))

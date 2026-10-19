@@ -15,6 +15,9 @@ public class RateLimiterService {
   private final StringRedisTemplate redis;
   private final DefaultRedisScript<Long> tokenBucketScript;
 
+  private final double REPLENISH_RATE = 100;
+  private final double CAPACITY = 5 * REPLENISH_RATE;
+
   // Measured in tokens
   @Value("${rate-limit.capacity:10}")
   private int capacity;
@@ -49,8 +52,6 @@ public class RateLimiterService {
       throw new IllegalStateException("Rate-limit capacity and refill rate must be positive");
     }
 
-    long curTimeMillis = System.currentTimeMillis();
-
     // set 1000 milliseconds as the minimum bucket expiry time to ensure that on systems with small
     // capacities or
     // refill rates the TTL does not go below one second. Keeps bucket around for however many
@@ -67,7 +68,6 @@ public class RateLimiterService {
               List.of(bucketKey),
               String.valueOf(capacity),
               String.valueOf(refillRate),
-              String.valueOf(curTimeMillis),
               String.valueOf(ttlMillis));
 
       if (result == null) {
@@ -77,7 +77,7 @@ public class RateLimiterService {
       return result == 1L;
 
     } catch (DataAccessException e) {
-      throw new RateLimiterUnavailableException("Could not execute rate-limit check.");
+      throw new RateLimiterUnavailableException("Could not execute rate-limit check.", e);
     }
   }
 
