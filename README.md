@@ -18,6 +18,11 @@ https://github.com/hashicorp/golang-lru/tree/main
 Useful when I introduce a cache to store a fixed size number of keys that are currently maxed out?
 
 
+Algorithms:
+https://www.geeksforgeeks.org/system-design/rate-limiting-algorithms-system-design/
+https://arcjet.com/learn/rate-limiting-guide
+
+
 It discusses four different types of limiters:
 
 1. Request rate limiter - restricts a user to N number of requests per second. I have implemented this with a set bucket capacity per second and a set refill rate
